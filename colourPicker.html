@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Color Picker Game</title>
+</head>
+<body>
+  <h1>Color Picker Game</h1>
+  <div id="color"></div>
+  <div id="choices"></div>
+  <div id="result"></div>
+  <script>
+    // Generate a random RGB color
+    function generateColor() {
+      var r = Math.floor(Math.random() * 256);
+      var g = Math.floor(Math.random() * 256);
+      var b = Math.floor(Math.random() * 256);
+      return "rgb(" + r + ", " + g + ", " + b + ")";
+    }
+    
+    // Check if the selected color is correct
+    function checkColor(event) {
+      if (event.target.style.backgroundColor === color) {
+        result.innerHTML = "Correct!";
+      } else {
+        result.innerHTML = "Wrong! Try again.";
+      }
+    }
+    
+    // Initialize the game
+    function init() {
+      color = generateColor();
+      colorDiv.style.backgroundColor = color;
+      var choices = [];
+      choices.push(color);
+      while (choices.length < 4) {
+        var c = generateColor();
+        if (choices.indexOf(c) === -1) {
+          choices.push(c);
+        }
+      }
+      // Shuffle the choices
+      for (var i = choices.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = choices[i];
+        choices[i] = choices[j];
+        choices[j] = temp;
+      }
+      // Add the choices to the DOM
+      choicesDiv.innerHTML = "";
+      for (var i = 0; i < choices.length; i++) {
+        var choice = document.createElement("div");
+        choice.className = "choice";
+        choice.style.backgroundColor = choices[i];
+        choice.addEventListener("click", checkColor);
+        choicesDiv.appendChild(choice);
+      }
+    }
+    
+    var color, colorDiv, choicesDiv, result;
+    colorDiv = document.getElementById("color");
+    choicesDiv = document.getElementById("choices");
+    result = document.getElementById("result");
+    init();
+  </script>
+  <style>
+    #color {
+      width: 100px;
+      height: 100px;
+      margin: 20px;
+      border: 1px solid black;
+    }
+    .choice {
+      display: inline-block;
+      width: 100px;
+      height: 100px;
+      margin: 20px;
+      border: 1px solid black;
+      cursor: pointer;
+    }
+  </style>
+</body>
+</html>
+
